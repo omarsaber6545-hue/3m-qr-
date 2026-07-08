@@ -1,0 +1,30 @@
+# Task List: 3M QR Studio SaaS Development
+
+- [x] Project Setup & Docker Configuration
+  - [x] Root `.env.example` & Nginx configuration
+  - [x] Root `docker-compose.yml`
+  - [x] GitHub Actions workflow
+- [x] Backend NestJS Service
+  - [x] Initialize NestJS project
+  - [x] Prisma schema & database migration setup
+  - [x] Redis, BullMQ, & WebSocket configurations
+  - [x] Auth Module (JWT + Google, GitHub, Discord OAuth placeholders)
+  - [x] QR Generation Engine (URL, WiFi, vCard, PDF, etc.)
+  - [x] AI QR Generation Integration (ComfyUI / Replicate API Adapter)
+  - [x] Storage Service (Supabase / Cloudinary Adapter)
+  - [x] Payment Service (Stripe Webhooks & Subscriptions)
+  - [x] Admin Module & System Logs
+  - [x] Analytics & History Module
+- [x] Frontend Next.js 15 Application
+  - [x] Initialize Next.js project
+  - [x] Setup Tailwind CSS, Theme, & Icons
+  - [x] UI Components & Styles (100+ AI styles data)
+  - [x] Home / Landing Page with Live Demo
+  - [x] Interactive QR Creator Studio
+  - [x] User Dashboard (Projects, Collections, Favorites)
+  - [x] Admin Dashboard (Users, Payments, System logs)
+  - [x] Authentication Views (Sign In, Sign Up)
+  - [x] State Management (Zustand) & API client (React Query)
+- [x] Verification & Readme
+  - [x] Run build checks
+  - [x] Write README & Setup Guide

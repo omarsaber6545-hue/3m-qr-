@@ -1,0 +1,190 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  GITHUB
+  DISCORD
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum ProjectStatus {
+  PENDING
+  GENERATING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentType {
+  SUBSCRIPTION
+  CREDITS
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+  DEBUG
+}
+
+model User {
+  id                    String        @id @default(uuid())
+  email                 String        @unique
+  password              String?
+  name                  String?
+  role                  Role          @default(USER)
+  provider              AuthProvider  @default(LOCAL)
+  providerId            String?
+  status                String        @default("ACTIVE") // ACTIVE, SUSPENDED
+  subscriptionPlan      Plan          @default(FREE)
+  subscriptionStatus    String        @default("INACTIVE") // ACTIVE, INACTIVE, CANCELED
+  stripeCustomerId      String?       @unique
+  stripeSubscriptionId  String?       @unique
+  credits               Int           @default(10) // Free tier starts with 10 credits
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  projects              Project[]
+  collections           Collection[]
+  payments              Payment[]
+  styles                AIStyle[]     @relation("CustomUserStyles")
+  systemLogs            SystemLog[]
+
+  @@index([email])
+}
+
+model Project {
+  id              String        @id @default(uuid())
+  name            String        @default("Untitled Project")
+  qrType          String        // URL, TEXT, EMAIL, PHONE, WHATSAPP, WIFI, SMS, PDF, VCARD, EVENT, LOCATION
+  qrData          String        // JSON string or raw text depending on type
+  prompt          String?
+  negativePrompt  String?
+  styleId         String?
+  style           AIStyle?      @relation(fields: [styleId], references: [id], onDelete: SetNull)
+  originalQrUrl   String?
+  generatedQrUrl  String?
+  controlWeight   Float         @default(0.95)
+  guidanceScale   Float         @default(7.5)
+  numSteps        Int           @default(30)
+  status          ProjectStatus @default(PENDING)
+  errorMsg        String?
+  isFavorite      Boolean       @default(false)
+  
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  collectionId    String?
+  collection      Collection?   @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model AIStyle {
+  id                     String    @id @default(uuid())
+  name                   String    @unique
+  promptTemplate         String
+  negativePromptTemplate String?
+  controlWeight          Float     @default(0.95)
+  guidanceScale          Float     @default(7.5)
+  numSteps               Int       @default(30)
+  previewUrl             String
+  isCustom               Boolean   @default(false)
+  
+  userId                 String?   // If custom style, belongs to user
+  user                   User?     @relation("CustomUserStyles", fields: [userId], references: [id], onDelete: Cascade)
+  
+  projects               Project[]
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Collection {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  projects    Project[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  stripeSessionId String        @unique
+  amount          Float
+  currency        String        @default("usd")
+  status          PaymentStatus @default(PENDING)
+  type            PaymentType
+  creditsAdded    Int           @default(0)
+  
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime      @default(now())
+
+  @@index([userId])
+}
+
+model Analytics {
+  id               String   @id @default(uuid())
+  date             DateTime @unique @default(now())
+  totalScans       Int      @default(0)
+  totalGenerations Int      @default(0)
+  activeUsers      Int      @default(0)
+  categoryMetrics  String   @default("{}") // JSON serialized string
+  createdAt        DateTime @default(now())
+
+  @@index([date])
+}
+
+model SystemLog {
+  id        String   @id @default(uuid())
+  level     LogLevel @default(INFO)
+  context   String
+  message   String
+  metadata  String?  // JSON serialized string
+  
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  createdAt DateTime @default(now())
+
+  @@index([level])
+  @@index([createdAt])
+}
