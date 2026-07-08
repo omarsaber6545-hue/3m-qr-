@@ -133,23 +133,20 @@ export default function SignupPage() {
             <span className="relative bg-[#0b0b14] px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Or continue with</span>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <button 
-              onClick={() => handleOAuthLogin('google')}
-              className="h-12 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-sm font-medium text-white transition"
-            >
-              Google
-            </button>
+          <div className="grid grid-cols-2 gap-4">
             <button 
               onClick={() => handleOAuthLogin('github')}
-              className="h-12 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-sm font-medium text-white transition"
+              className="h-12 rounded-xl bg-[#24292f] hover:bg-[#1a1e22] border border-[#2f363d] flex items-center justify-center text-sm font-semibold text-white transition duration-200 shadow-lg hover:shadow-black/50"
             >
-              <Github className="w-4 h-4 mr-2" /> GitHub
+              <Github className="w-5 h-5 mr-2 shrink-0" /> GitHub
             </button>
             <button 
               onClick={() => handleOAuthLogin('discord')}
-              className="h-12 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-sm font-medium text-white transition"
+              className="h-12 rounded-xl bg-[#5865f2] hover:bg-[#4752c4] border border-[#4e5af1] flex items-center justify-center text-sm font-semibold text-white transition duration-200 shadow-lg hover:shadow-indigo-500/10"
             >
+              <svg className="w-5 h-5 mr-2 fill-current shrink-0" viewBox="0 0 127.14 96.36">
+                <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5A48.55,48.55,0,0,0,32,77.53a74.37,74.37,0,0,0,63.13,0,48.55,48.55,0,0,0,3.87,3a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129,54.65,123.48,31.58,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z" />
+              </svg>
               Discord
             </button>
           </div>
