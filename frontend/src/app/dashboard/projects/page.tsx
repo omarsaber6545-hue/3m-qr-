@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '@/utils/api';
 import { 
   History, Search, Heart, Trash2, Download, ExternalLink, 
-  Sparkles, Calendar, Info, X, Eye
+  Sparkles, Calendar, Info, X, Eye, Loader2
 } from 'lucide-react';
 
 export default function ProjectsPage() {
